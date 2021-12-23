@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<style>
+    #usertable {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 50%;
+    }
+
+    #usertable td,
+    #usertable th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-size: 10px
+    }
+
+    #usertable tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #usertable tr:hover {
+        background-color: #ddd;
+    }
+
+    #usertable th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    #usersform {
+        padding: 10px;
+        margin: 10px
+    }
+
+    #form-group {
+        margin: 10px
+    }
+</style>
+
+<body>
+    <table id="usertable">
+        <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Website</th>
+        </thead>
+        <tbody id="usersinfo"></tbody>
+    </table>
+    <h3>Add User</h3>
+    <form id="usersform">
+        <div id="form-group">
+            <label for="userid">User Id:</label>
+            <input type="number" id="userid">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="username">Name:</label>
+            <input type="text" id="username">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usersname">Username:</label>
+            <input type="text" id="usersname">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usermail">Email:</label>
+            <input type="mail" id="usermail">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="userstreet">Street:</label>
+            <input type="text" id="userstreet">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usersuite">Suite:</label>
+            <input type="text" id="usersuite">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usercity">City:</label>
+            <input type="text" id="usercity">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="userzipcode">ZipCode:</label>
+            <input type="number" id="userzipcode">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="userlat">Lat:</label>
+            <input type="number" id="userlat">
+            <br/>
+        </div>
+        <label for="userlng">Lng:</label>
+        <input type="number" id="userlng">
+        <br/>
+        </div>
+        <div id="form-group">
+            <label for="userphone">Phone:</label>
+            <input type="number" id="userphone">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="userwebsite">Website:</label>
+            <input type="url" id="userwebsite">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usercompanyname">Company Name:</label>
+            <input type="text" id="usercompany">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="usercatchphrase">Catch Phrase:</label>
+            <input type="text" id="usercatchphrase">
+            <br/>
+        </div>
+        <div id="form-group">
+            <label for="userbs">bs:</label>
+            <input type="text" id="userbs">
+            <br/>
+        </div>
+
+        <div id="form-group">
+            <input type="submit">
+        </div>
+    </form>
+
+    <script> 
+    let users = [];
+        const addUsersForm = document.getElementById("usersform")
+        const idValue = document.getElementById("userid")
+        const nameValue = document.getElementById("username")
+        const usernameValue = document.getElementById("usersname")
+        const mailValue = document.getElementById("usermail")
+        const streetValue = document.getElementById("userstreet")
+        const suiteValue = document.getElementById("usersuite")
+        const cityValue = document.getElementById("usercity")
+        const zipcodeValue = document.getElementById("userzipcode")
+        const latValue = document.getElementById("userlat")
+        const lngValue = document.getElementById("userlng")
+        const phoneValue = document.getElementById("userphone")
+        const websiteValue = document.getElementById("userwebsite")
+        const companynameValue = document.getElementById("usercompany")
+        const catchphraseValue = document.getElementById("usercatchphrase")
+        const bsValue = document.getElementById("userbs")
+        async function getUsers() {
+            try {
+                await fetch("https://jsonplaceholder.typicode.com/users")
+                    .then(res => res.json())
+                    .then(data => initialize(data))
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        getUsers()
+        function initialize(data) {
+            console.log(data)
+            var temp = "";
+            data.forEach((item) => {
+
+                temp += "<tr>"
+                temp += "<td>" + item.id + "</td>"
+                temp += "<td>" + item.name + "</td>"
+                temp += "<td>" + item.email + "</td>"
+                temp += "<td>" + item.phone + "</td>"
+                temp += "<td>" + item.website + "</td>"
+                temp += "</tr>"
+            })
+            document.getElementById("usersinfo").innerHTML = temp;
+            users = data;
+            
+            console.log(users)
+        }
+
+        //POST users
+        addUsersForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            fetch('https://jsonplaceholder.typicode.com/users/1/posts', {
+                method: "POST",                
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: idValue.value,
+                    name: nameValue.value,
+                    username: usernameValue.value,
+                    email: mailValue.value,
+                    address: {
+                        street: streetValue.value,
+                        suite: suiteValue.value,
+                        city: cityValue.value,
+                        zipcode: zipcodeValue.value,
+                        geo: {
+                            lat: latValue.value,
+                            lng: lngValue.value
+                        }
+                    },
+                    phone: phoneValue.value,
+                    website: websiteValue.value,
+                    company: {
+                        name: companynameValue.value,
+                        catchPhrase: catchphraseValue.value,
+                        bs: bsValue.value
+                    }
+                })
+            })
+                .then(res => res.json())
+                .then(data => {                   
+                   
+                   users.push(data)
+                   console.log(users)
+                    initialize(users)
+                })
+        })
+
+    </script>
+</body>
+
+</html>
